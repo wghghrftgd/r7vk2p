@@ -1,0 +1,27 @@
+<!doctype html>
+<!--
+  Weiterleitung für den TikTok-Login (GitHub Pages, öffentlich).
+  Gibt die Antwort von TikTok (code, state) sofort an das Dashboard im Heimnetz weiter.
+  Ziel ist ein Name, den nur der eigene DNS (AdGuard) kennt – hier steht weder eine IP
+  noch ein Geheimnis. Der Code allein nützt niemandem: Eintauschen kann ihn nur das
+  Dashboard mit dem Client-Secret, nur einmal und nur mit dem passenden state.
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex">
+  <title>Redirect</title>
+</head>
+<body style="font-family: sans-serif; padding: 40px">
+  <p>Redirecting …</p>
+  <script>
+    const incoming = new URLSearchParams(location.search);
+    const forward = new URLSearchParams();
+    for (const key of ["code", "state", "error", "error_description", "scopes"]) {
+      if (incoming.has(key)) forward.set(key, incoming.get(key));
+    }
+    location.replace("http://clip.internal:8000/tiktok/callback?" + forward.toString());
+  </script>
+</body>
+</html>
